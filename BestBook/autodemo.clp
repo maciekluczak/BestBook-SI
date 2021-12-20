@@ -46,244 +46,719 @@
 ;;;* QUERY RULES *
 ;;;***************
 
-(defrule determine-engine-state ""
+;;; POPULAR FICTION
+
+(defrule determine-popular-fiction ""
 
    (logical (start))
 
    =>
 
-   (assert (UI-state (display StartQuestion)
-                     (relation-asserted engine-starts)
+   (assert (UI-state (display Popular_Question)
+                     (relation-asserted popular-fiction)
                      (response No)
                      (valid-answers No Yes))))
    
-(defrule determine-runs-normally ""
+(defrule determine-thrillers ""
 
-   (logical (engine-starts Yes))
+   (logical (popular-fiction Yes))
 
    =>
 
-   (assert (UI-state (display RunQuestion)
-                     (relation-asserted runs-normally)
+   (assert (UI-state (display PopularThrillers_Question)
+                     (relation-asserted thrillers)
                      (response No)
                      (valid-answers No Yes))))
 
-(defrule determine-rotation-state ""
+(defrule determine-mystery ""
 
-   (logical (engine-starts No))
+	(logical (thrillers No))
+	
+	=>
+	
+	(assert (UI-state (display PopularMystery_Question)
+					  (relation-asserted mystery)
+					  (response No)
+					  (valid-answers No Yes))))
 
-   =>
+(defrule determine-family ""
 
-   (assert (UI-state (display RotateQuestion)
-                     (relation-asserted engine-rotates)
-                     (response No)
-                     (valid-answers No Yes))))
-   
-(defrule determine-sluggishness ""
+	(logical (mystery No))
+	
+	=>
+	
+	(assert (UI-state (display PopularFamily_Question)
+					  (relation-asserted family)
+					  (response No)
+					  (valid-answers No Yes))))
+					  
+(defrule determine-fantasy-horror ""
 
-   (logical (runs-normally No))
+	(logical (family No))
+	
+	=>
+	
+	(assert (UI-state (display PopularFantasy/Horror_Question)
+					  (relation-asserted fantasy-horror)
+					  (response No)
+					  (valid-answers No Yes))))
+					  
+(defrule determine-romance ""
 
-   =>
+	(logical (fantasy-horror No))
+	
+	=>
+	
+	(assert (UI-state (display PopularRomance_Question)
+					  (relation-asserted romance)
+					  (response No)
+					  (valid-answers No Yes))))
+					  
+(define determine-time-travel ""
 
-   (assert (UI-state (display SluggishQuestion)
-                     (relation-asserted engine-sluggish)
-                     (response No)
-                     (valid-answers No Yes))))
-   
-(defrule determine-misfiring ""
+	(logical (romance No))
+	
+	=>
+	
+	(assert (UI-state (display PopularTimeTravel_Question)
+					  (relation-asserted time-travel)
+					  (response No)
+					  (valid-answers No Yes))))
+					  
+;;; LITERARY FICTION
 
-   (logical (runs-normally No))
+(defrule determine-literary-fiction ""
 
-   =>
-
-   (assert (UI-state (display MisfireQuestion)
-                     (relation-asserted engine-misfires)
-                     (response No)
-                     (valid-answers No Yes))))
-
-(defrule determine-knocking ""
-
-   (logical (runs-normally No))
-
-   =>
-
-   (assert (UI-state (display KnockQuestion)
-                     (relation-asserted engine-knocks)
-                     (response No)
-                     (valid-answers No Yes))))
-
-(defrule determine-low-output ""
-
-   (logical (runs-normally No))
-
-   =>
-
-   (assert (UI-state (display OutputQuestion)
-                     (relation-asserted engine-output-low)
-                     (response No)
-                     (valid-answers No Yes))))
-
-(defrule determine-gas-level ""
-
-   (logical (engine-starts No)
-
-            (engine-rotates Yes))
-
-   =>
-
-   (assert (UI-state (display GasQuestion)
-                     (relation-asserted tank-has-gas)
-                     (response No)
-                     (valid-answers No Yes))))
-
-(defrule determine-battery-state ""
-  
-   (logical (engine-rotates No))
+   (logical (popular-fiction No))
 
    =>
-   
-   (assert (UI-state (display BatteryQuestion)
-                     (relation-asserted battery-has-charge)
+
+   (assert (UI-state (display Literary_Question)
+                     (relation-asserted literary)
                      (response No)
                      (valid-answers No Yes))))
 
-(defrule determine-point-surface-state ""
+(defrule determine-dystopia ""
 
-   (or (logical (engine-starts No)  
-   
-                (engine-rotates Yes))
-                     
-       (logical (engine-output-low Yes)))
+	(logical (literary Yes))
+	
+	=>
+	
+	(assert (UI-state (display LiteraryDystopia_Question)
+					  (relation-asserted dystopia)
+					  (response No)
+					  (valid-answers No Yes))))
 
-   =>
+(defrule determine-fantasy ""
 
-   (assert (UI-state (display PointsQuestion)
-                     (relation-asserted point-surface-state)
-                     (response Normal)
-                     (valid-answers Normal Burned Contaminated))))
+	(logical (dystopia No))
+	
+	=>
+	
+	(assert (UI-state (display LiteraryFantasy_Question)
+					  (relation-asserted fantasy)
+					  (response No)
+					  (valid-answers No Yes))))
+					  
+(defrule determine-identity ""
 
-(defrule determine-conductivity-test ""
-   
-   (logical (engine-starts No)  
-   
-            (engine-rotates No)
-            
-            (battery-has-charge Yes))
+	(logical (fantasy No))
+	
+	=>
+	
+	(assert (UI-state (display LiteraryIdentity_Question)
+					  (relation-asserted identity)
+					  (response No)
+					  (valid-answers No Yes))))
+					  
+(defrule determine-magical-realism ""
 
-   =>
+	(logical (identity No))
+	
+	=>
+	
+	(assert (UI-state (display LiteraryMagicalRealism_Question)
+					  (relation-asserted magical-realism)
+					  (response No)
+					  (valid-answers No Yes))))
+					  
+(defrule determine-comic-books ""
 
-   (assert (UI-state (display CoilQuestion)
-                     (relation-asserted conductivity-test-positive)
-                     (response No)
-                     (valid-answers No Yes))))
+	(logical (magical-realism No))
+	
+	=>
+	
+	(assert (UI-state (display LiteraryComicBooks_Question)
+					  (relation-asserted comic-books)
+					  (response No)
+					  (valid-answers No Yes))))
+					 
+(defrule determine-crime ""
+
+	(logical (comic-books No))
+	
+	=>
+	
+	(assert (UI-state (display LiteraryCrime_Question)
+					  (relation-asserted crime)
+					  (response No)
+					  (valid-answers No Yes))))
+					  
+(defrule determine-history ""
+
+	(logical (crime No))
+	
+	=>
+	
+	(assert (UI-state (display LiteraryHistory_Question)
+					  (relation-asserted history)
+					  (response No)
+					  (valid-answers No Yes))))
+					  
+(defrule determine-lit-family ""
+
+	(logical (history No))
+	
+	=>
+	
+	(assert (UI-state (display LiteraryFamily_Question)
+					  (relation-asserted lit-family)
+					  (response No)
+					  (valid-answers No Yes))))
+					  
+(defrule determine-lit-mystery ""
+
+	(logical (lit-family No))
+	
+	=>
+	
+	(assert (UI-state (display LiteraryMystery_Question)
+					  (relation-asserted lit-mystery)
+					  (response No)
+					  (valid-answers No Yes))))
+					  
+(defrule determine-baseball ""
+
+	(logical (lit-mystery No))
+	
+	=>
+	
+	(assert (UI-state (display LiteraryBaseball_Question)
+					  (relation-asserted baseball)
+					  (response No)
+					  (valid-answers No Yes))))
+					  
+(defrule determine-new-culture ""
+
+	(logical (baseball No))
+	
+	=>
+	
+	(assert (UI-state (display LiteraryNewCulture_Question)
+					  (relation-asserted new-culture)
+					  (response No)
+					  (valid-answers No Yes))))
+
+;;; FICTION FOR KIDS					  
+
+(defrule determine-fiction-for-kids	""
+
+	(logical (literary No))
+	
+	=>
+	
+	(assert (UI-state (display KidsQuestion)
+					  (relation-asserted kids)
+					  (response No)
+					  (valid-answers No Yes))))			  
+				
+(defrule determine-young-adults	""
+
+	(logical (kids Yes))
+	
+	=>
+	
+	(assert (UI-state (display KidsYoungAdults_Question)
+					  (relation-asserted young-adults)
+					  (response No)
+					  (valid-answers No Yes))))	
+					  
+(defrule determine-childrens ""
+
+	(logical (young-adults No))
+	
+	=>
+	
+	(assert (UI-state (display KidsChildren_Question)
+					  (relation-asserted children)
+					  (response No)
+					  (valid-answers No Yes))))	
+					  
+;;; NONFICTION
+
+(defrule determine-nonfiction ""
+
+	(logical (literary No))
+	
+	=>
+	
+	(assert (UI-state (display Nonfiction_Question)
+					  (relation-asserted nonfiction)
+					  (response No)
+					  (valid-answers No Yes))))
+					  
+(defrule determine-memoirs ""
+
+	(logical (nonfiction Yes))
+	
+	=>
+	
+	(assert (UI-state (display NonfictionMemoirs_Question)
+					  (relation-asserted memoirs)
+					  (response No)
+					  (valid-answers No Yes))))	
+					  
+(defrule determine-food ""
+
+	(logical (memoirs No))
+	
+	=>
+	
+	(assert (UI-state (display NonfictionFood_Question)
+					  (relation-asserted food)
+					  (response No)
+					  (valid-answers No Yes))))	
+					  
+(defrule determine-business ""
+
+	(logical (food No))
+	
+	=>
+	
+	(assert (UI-state (display NonfictionBusiness_Question)
+					  (relation-asserted business)
+					  (response No)
+					  (valid-answers No Yes))))
+					  
+(defrule determine-biography ""
+
+	(logical (business No))
+	
+	=>
+	
+	(assert (UI-state (display NonfictionBiography_Question)
+					  (relation-asserted biography)
+					  (response No)
+					  (valid-answers No Yes))))									  				  					  				
+					  									  				  					  				
+(defrule determine-grammar ""
+
+	(logical (biography No))
+	
+	=>
+	
+	(assert (UI-state (display NonfictionGrammar_Question)
+					  (relation-asserted grammar)
+					  (response No)
+					  (valid-answers No Yes))))	
+					  
+(defrule determine-non-history ""
+
+	(logical (grammar No))
+	
+	=>
+	
+	(assert (UI-state (display NonfictionHistory_Question)
+					  (relation-asserted non-history)
+					  (response No)
+					  (valid-answers No Yes))))
+					  
+(defrule determine-humor ""
+
+	(logical (non-history No))
+	
+	=>
+	
+	(assert (UI-state (display NonfictionHumor_Question)
+					  (relation-asserted humor)
+					  (response No)
+					  (valid-answers No Yes))))
+					  
+(defrule determine-inspiration ""
+
+	(logical (humor No))
+	
+	=>
+	
+	(assert (UI-state (display NonfictionInspiration_Qustion)
+					  (relation-asserted inspiration)
+					  (response No)
+					  (valid-answers No Yes))))						  
+					  						  
+(defrule determine-government ""
+
+	(logical (inspiration No))
+	
+	=>
+	
+	(assert (UI-state (display NonfictionGovernment_Question)
+					  (relation-asserted government)
+					  (response No)
+					  (valid-answers No Yes))))	
+					  
+;;; SELF-HELP					  	
+					  
+(defrule determine-relationships ""
+
+	(logical (nonfiction No))
+	
+	=>
+	
+	(assert (UI-state (display SelfHelpRelationships_Question)
+					  (relation-asserted relationships)
+					  (response No)
+					  (valid-answers No Yes))))					  				  						  						  
+
+(defrule determine-inspirational ""
+
+	(logical (relationships No))
+	
+	=>
+	
+	(assert (UI-state (display SelfHelpInspirational_Question)
+					  (relation-asserted inspirational)
+					  (response No)
+					  (valid-answers No Yes))))	
 
 ;;;****************
-;;;* REPAIR RULES *
+;;;* RECOMMENDATION RULES *
 ;;;****************
 
-(defrule normal-engine-state-conclusions ""
+;;; POPULAR FICTION RESULTS
 
-   (logical (runs-normally Yes))
-   
-   =>
+(defrule result-thrillers ""
 
-   (assert (UI-state (display NoRepair)
-                     (state final))))
+	(logical (thrillers Yes))
+	
+	=>
+	
+	(assert (UI-state (display PopularThrillers_Result)
+					  (state final))))
+					  
+(defrule result-mystery ""
 
-(defrule engine-sluggish ""
+	(logical (mystery Yes))
+	
+	=>
+	
+	(assert (UI-state (display PopularMystery_Result)
+					  (state final))))
+					  
+(defrule result-family ""
 
-   (logical (engine-sluggish Yes))
-   
-   =>
+	(logical (family Yes))
+	
+	=>
+	
+	(assert (UI-state (display PopularFamily_Result)
+					  (state final))))
+					  
+(defrule result-fantasy-horror ""
 
-   (assert (UI-state (display FuelLineRepair)
-                     (state final))))
+	(logical (fantasy-horror Yes))
+	
+	=>
+	
+	(assert (UI-state (display PopularFantasy/Horror_Result)
+					  (state final))))
+	
+(defrule result-romance ""
 
-(defrule engine-misfires ""
+	(logical (romance Yes))
+	
+	=>
+	
+	(assert (UI-state (display PopularRomance_Result)
+					  (state final))))
+					  
+(defrule result-time-travel ""
 
-   (logical (engine-misfires Yes))
+	(logical (time-travel Yes))
+	
+	=>
+	
+	(assert (UI-state (display PopularTimeTravel_Result)
+					  (state final))))
+					  
+(defrule result-suspense ""
 
-   =>
+	(logical (time-travel No))
+	
+	=>
+	
+	(assert (UI-state (display PopularSuspense_Result)
+					  (state final))))
 
-   (assert (UI-state (display PointGapRepair)
-                     (state final))))
+;;; LITERARY FICTION RESULTS
 
-(defrule engine-knocks ""
+(defrule result-dystopia ""
 
-   (logical (engine-knocks Yes))
+	(logical (dystopia Yes))
+	
+	=>
+	
+	(assert (UI-state (display LiteraryDystopia_Result)
+					  (state final))))
+					  
+(defrule result-fantasy ""
 
-   =>
+	(logical (fantasy Yes))
+	
+	=>
+	
+	(assert (UI-state (display LiteraryFantasy_Result)
+					  (state final))))
 
-   (assert (UI-state (display AdjustTimingRepair)
-                     (state final))))
+(defrule result-identity ""
 
-(defrule tank-out-of-gas ""
+	(logical (identity Yes))
+	
+	=>
+	
+	(assert (UI-state (display LiteraryIdentity_Result)
+					  (state final))))
 
-   (logical (tank-has-gas No))
+(defrule result-magical-realism ""
 
-   =>
+	(logical (magical-realism Yes))
+	
+	=>
+	
+	(assert (UI-state (display LiteraryMagicalRealism_Result)
+					  (state final))))
+					  
+(defrule result-comic-books ""
 
-   (assert (UI-state (display AddGasRepair)
-                     (state final))))
-   
-(defrule battery-dead ""
+	(logical (comic-books Yes))
+	
+	=>
+	
+	(assert (UI-state (display LiteraryComicBooks_Result)
+					  (state final))))
 
-   (logical (battery-has-charge No))
-   
-   =>
+(defrule result-crime ""
 
-   (assert (UI-state (display ReplaceBatteryRepair)
-                     (state final))))
-   
-(defrule point-surface-state-burned ""
+	(logical (crime Yes))
+	
+	=>
+	
+	(assert (UI-state (display LiteraryCrime_Result)
+					  (state final))))
+                    
+(defrule result-history ""
 
-   (logical (point-surface-state Burned))
+	(logical (history Yes))
+	
+	=>
+	
+	(assert (UI-state (display LiteraryHistory_Result)
+					  (state final))))
+					  
+(defrule result-lit-family ""
 
-   =>
+	(logical (lit-family Yes))
+	
+	=>
+	
+	(assert (UI-state (display LiteraryFamily_Result)
+					  (state final))))
+					  
+(defrule result-lit-mystery ""
 
-   (assert (UI-state (display ReplacePointsRepair)
-                     (state final))))
-                     
-(defrule point-surface-state-contaminated ""
-   
-   (logical (point-surface-state Contaminated))
-   
-   =>
+	(logical (lit-mystery Yes))
+	
+	=>
+	
+	(assert (UI-state (display LiteraryMystery_Result)
+					  (state final))))
+					  
+(defrule result-baseball ""
 
-   (assert (UI-state (display CleanPointsRepair)
-                     (state final))))
+	(logical (baseball Yes))
+	
+	=>
+	
+	(assert (UI-state (display LiteraryBaseball_Result)
+					  (state final))))
+					  
+(defrule result-new-culture ""
 
-(defrule conductivity-test-positive-yes ""
+	(logical (new-culture Yes))
+	
+	=>
+	
+	(assert (UI-state (display LiteraryNewCulture_Result)
+					  (state final))))
+					  
+(defrule result-good-fantasy ""
 
-   (logical (conductivity-test-positive Yes))
-   
-   =>
+	(logical (new-culture No))
+	
+	=>
+	
+	(assert (UI-state (display LiteraryFantasy2_Result)
+					  (state final))))
+					  
+;;; FICTION FOR KIDS RESULTS
 
-   (assert (UI-state (display LeadWireRepair)
-                     (state final))))
-                     
-(defrule conductivity-test-positive-no ""
+(defrule result-young-adults ""
 
-   (logical (conductivity-test-positive No))
-      
-   =>
+	(logical (young-adults Yes))
+	
+	=>
+	
+	(assert (UI-state (display KidsYoungAdults_Result)
+					  (state final))))	
+					  
+(defrule result-children ""
 
-   (assert (UI-state (display CoilRepair)
-                     (state final))))
-                     
-(defrule no-repairs ""
+	(logical (children Yes))
+	
+	=>
+	
+	(assert (UI-state (display KidsChildren_Result)
+					  (state final))))	
+					  
+(defrule result-teen ""
 
-   (declare (salience -10))
-  
-   (logical (UI-state (id ?id)))
-   
-   (state-list (current ?id))
-     
-   =>
-  
-   (assert (UI-state (display MechanicRepair)
-                     (state final))))
-                     
+	(logical (children No))
+	
+	=>
+	
+	(assert (UI-state (display KidsTeen_Result)
+					  (state final))))		
+					  
+;;; NONFICTION RESULTS
+
+(defrule result-memoirs ""
+
+	(logical (memoirs Yes))
+	
+	=>
+	
+	(assert (UI-state (display NonfictionMemoirs_Result)
+					  (state final))))	
+					  
+(defrule result-food ""
+
+	(logical (food Yes))
+	
+	=>
+	
+	(assert (UI-state (display NonfictionFood_Result)
+					  (state final))))	
+					  
+(defrule result-business ""
+
+	(logical (business Yes))
+	
+	=>
+	
+	(assert (UI-state (display NonfictionBusiness_Result)
+					  (state final))))						  					  				  
+					  
+(defrule result-biography ""
+
+	(logical (biography Yes))
+	
+	=>
+	
+	(assert (UI-state (display NonfictionBiography_Result)
+					  (state final))))	
+					  
+(defrule result-grammar ""
+
+	(logical (grammar Yes))
+	
+	=>
+	
+	(assert (UI-state (display NonfictionGrammar_Result)
+					  (state final))))	
+					  
+(defrule result-non-history ""
+
+	(logical (non-history Yes))
+	
+	=>
+	
+	(assert (UI-state (display NonFictionHistory_Result)
+					  (state final))))	
+					  
+(defrule result-humor ""
+
+	(logical (humor Yes))
+	
+	=>
+	
+	(assert (UI-state (display NonfictionHumor_Result)
+					  (state final))))	
+					  
+(defrule result-memoirs ""
+
+	(logical (inspiration Yes))
+	
+	=>
+	
+	(assert (UI-state (display NonfictionInspiration_Result)
+					  (state final))))	
+					  
+(defrule result-government ""
+
+	(logical (government Yes))
+	
+	=>
+	
+	(assert (UI-state (display NonfictionGovernment_Result)
+					  (state final))))	
+					  
+(defrule result-nutrition ""
+
+	(logical (government No))
+	
+	=>
+	
+	(assert (UI-state (display NonfictionNutrition_Result)
+					  (state final))))	
+					  
+;;; SELF-HELP RESULTS
+
+(defrule result-relationships ""
+
+	(logical (relationships Yes))
+	
+	=>
+	
+	(assert (UI-state (display SelfHelpRelationships_Result)
+					  (state final))))	
+					  
+(defrule result-inspirational ""
+
+	(logical (inspirational Yes))
+	
+	=>
+	
+	(assert (UI-state (display SelfHelpInspirational_Result)
+					  (state final))))	
+					  
+(defrule result-sh-Business ""
+
+	(logical (inspirational No))
+	
+	=>
+	
+	(assert (UI-state (display SelfHelpBusiness_Result)
+					  (state final))))					  				  				  					  					  					  					  					  					  					  			  				  				  
+
 ;;;*************************
 ;;;* GUI INTERACTION RULES *
 ;;;*************************
