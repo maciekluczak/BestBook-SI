@@ -61,7 +61,7 @@ class BestBookGUI implements ActionListener
      {  
       try
         {
-         bookResources = ResourceBundle.getBundle("resources.AutoResources",Locale.getDefault());
+         bookResources = ResourceBundle.getBundle("resources.BookResources",Locale.getDefault());
         }
       catch (MissingResourceException mre)
         {
@@ -73,7 +73,7 @@ class BestBookGUI implements ActionListener
       /* Create a new JFrame container. */
       /*================================*/
      
-      JFrame jfrm = new JFrame(bookResources.getString("AutoDemo"));  
+      JFrame jfrm = new JFrame(bookResources.getString("BookDemo"));  
  
       /*=============================*/
       /* Specify FlowLayout manager. */
