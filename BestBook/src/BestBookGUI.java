@@ -79,13 +79,13 @@ class BestBookGUI implements ActionListener
       /* Specify FlowLayout manager. */
       /*=============================*/
         
-      jfrm.getContentPane().setLayout(new GridLayout(3,1));  
+      jfrm.getContentPane().setLayout(new BorderLayout());  
  
       /*=================================*/
       /* Give the frame an initial size. */
       /*=================================*/
      
-      jfrm.setSize(350,400);  
+      jfrm.setSize(600,400);  
   
       /*=============================================================*/
       /* Terminate the program when the user closes the application. */
@@ -99,6 +99,7 @@ class BestBookGUI implements ActionListener
       
       JPanel displayPanel = new JPanel(); 
       displayLabel = new JLabel();
+ 
       displayPanel.add(displayLabel);
       
       /*===========================*/
@@ -128,9 +129,9 @@ class BestBookGUI implements ActionListener
       /* Add the panels to the content pane. */
       /*=====================================*/
       
-      jfrm.getContentPane().add(displayPanel); 
-      jfrm.getContentPane().add(choicesPanel); 
-      jfrm.getContentPane().add(buttonPanel); 
+      jfrm.getContentPane().add(displayPanel, BorderLayout.NORTH); 
+      jfrm.getContentPane().add(choicesPanel, BorderLayout.CENTER); 
+      jfrm.getContentPane().add(buttonPanel, BorderLayout.SOUTH); 
 
       /*========================*/
       /* Load the auto program. */
@@ -141,7 +142,7 @@ class BestBookGUI implements ActionListener
       clips.load("autodemo.clp");
       
       clips.reset();
-      runAuto();
+      runBook();
 
       /*====================*/
       /* Display the frame. */
@@ -228,8 +229,10 @@ class BestBookGUI implements ActionListener
       /*====================================*/
 
       String theText = bookResources.getString(fv.getFactSlot("display").symbolValue());
+      
             
       wrapLabelText(displayLabel,theText);
+      
       
       executionThread = null;
       
@@ -255,7 +258,7 @@ class BestBookGUI implements ActionListener
    /***********/
    /* runAuto */
    /***********/  
-   public void runAuto()
+   public void runBook()
      {
       Runnable runThread = 
          new Runnable()
@@ -316,17 +319,17 @@ class BestBookGUI implements ActionListener
                                ")");
            }
            
-         runAuto();
+         runBook();
         }
       else if (ae.getActionCommand().equals("Restart"))
         { 
          clips.reset(); 
-         runAuto();
+         runBook();
         }
       else if (ae.getActionCommand().equals("Prev"))
         {
          clips.assertString("(prev " + currentID + ")");
-         runAuto();
+         runBook();
         }
      }
 
@@ -337,53 +340,15 @@ class BestBookGUI implements ActionListener
      JLabel label, 
      String text) 
      {
-      FontMetrics fm = label.getFontMetrics(label.getFont());
-      Container container = label.getParent();
-      int containerWidth = container.getWidth();
-      int textWidth = SwingUtilities.computeStringWidth(fm,text);
-      int desiredWidth;
-
-      if (textWidth <= containerWidth)
-        { desiredWidth = containerWidth; }
-      else
-        { 
-         int lines = (int) ((textWidth + containerWidth) / containerWidth);
-                  
-         desiredWidth = (int) (textWidth / lines);
-        }
-                 
-      BreakIterator boundary = BreakIterator.getWordInstance();
-      boundary.setText(text);
+     
+      String textGUI = new String("<html><center>"+ text+ "<html/>");
+      String textLine = textGUI.replaceAll("%", "<br/>");
+      String textLeft = textLine.replaceAll("!", "</center><left>");
+      String theTextGUI = textLeft.replaceAll("@", "</left><center>");
+      System.out.println(theTextGUI);
+      label.setText(theTextGUI);
    
-      StringBuffer trial = new StringBuffer();
-      StringBuffer real = new StringBuffer("<html><center>");
-   
-      int start = boundary.first();
-      for (int end = boundary.next(); end != BreakIterator.DONE;
-           start = end, end = boundary.next())
-        {
-         String word = text.substring(start,end);
-         trial.append(word);
-         int trialWidth = SwingUtilities.computeStringWidth(fm,trial.toString());
-         if (trialWidth > containerWidth) 
-           {
-            trial = new StringBuffer(word);
-            real.append("<br>");
-            real.append(word);
-           }
-         else if (trialWidth > desiredWidth)
-           {
-            trial = new StringBuffer("");
-            real.append(word);
-            real.append("<br>");
-           }
-         else
-           { real.append(word); }
-        }
-   
-      real.append("</html>");
-   
-      label.setText(real.toString());
+      
      }
      
    public static void main(String args[])
